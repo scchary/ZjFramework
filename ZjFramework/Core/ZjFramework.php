@@ -18,6 +18,6 @@ class ZjFramework
         //注册异常处理
         //配置加载
         \Core\Config::setConfig(FRAMEWORK_PATH.'Conf/',array_merge(array(CONFIG),CONFIG_EXTENSION));
-        var_dump($_SERVER['PATH_INFO']);
+        \Core\Routing::routing();
     }
 }
