@@ -12,16 +12,23 @@ namespace Core;
 class ZjFramework
 {
     static function start(){
+        header("Content-type: text/html; charset=utf-8");
         require FRAMEWORK_PATH.'Core/AutoLoad'.EXT;
         spl_autoload_register('\\Core\\Autoload::Load');//注册系统自动加载函数
+        set_error_handler('\\Core\\ErrorHandler::errorHandler');//自己的错误处理函数
+        trigger_error('APPLICATION_DIRECTORY_NOT_EXISTS',E_USER_ERROR);
+        debug_print_backtrace();
+        die();
         //注册错误处理
         //注册异常处理
         //配置加载
         \Core\Config::setConfig(FRAMEWORK_PATH.'Conf/',array_merge(array(CONFIG),CONFIG_EXTENSION));
         \Core\Routing::routing();//根据参数对应到相应的方法
         self::setGet();
-        var_dump($_GET);
+        var_dump(APP_PATH);
         var_dump(realpath(APP_PATH));
+        $Controller = new \ReflectionClass(CONTROLLER_NAME);
+
     }
     //设置GET变量
     static function setGet()
