@@ -22,11 +22,27 @@ class ErrorHandler
     {
         if(E_USER_ERROR == $errorNo)
         {
-            $errorMes = $GLOBALS['Config'][$errorMes];
-            echo '错误编号：'.$errorNo.PHP_EOL;
-            echo '错误信息：'.$errorMes.PHP_EOL;
-            echo '错误文件：'.$errorFile.PHP_EOL;
-            echo '错误行号：'.$errorLine.PHP_EOL;
+            $errorConf = require FRAMEWORK_CONF_PATH.ERROR_CONFIG_NAME.EXT;
+            switch($errorMes)
+            {
+                case 'APP_PATH_NOT_EXITS' :
+                    $errorMes = $errorConf[$errorMes];
+                    break;
+                case 'MODULE_PATH_NOT_EXITS' :
+                    $errorMes = MODULE_NAME.$errorConf[$errorMes];
+                    break;
+                case 'CONTROLLER_NOT_EXITS' :
+                    $errorMes = CONTROLLER_NAME.$errorConf[$errorMes];
+                    break;
+                case 'ACTION_NOT_EXITS' :
+                    $errorMes = ACTION_NAME.$errorConf[$errorMes];
+                    break;
+                case 'CLASS_FILE_NOT_EXITS' :
+                    $errorMes = $errorConf[$errorMes];
+                    break;
+            }
+            echo $errorMes;
+            exit;
         }
     }
     static function showError()

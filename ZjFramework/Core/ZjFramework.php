@@ -15,20 +15,15 @@ class ZjFramework
         header("Content-type: text/html; charset=utf-8");
         require FRAMEWORK_PATH.'Core/AutoLoad'.EXT;
         spl_autoload_register('\\Core\\Autoload::Load');//注册系统自动加载函数
-        set_error_handler('\\Core\\ErrorHandler::errorHandler');//自己的错误处理函数
-        trigger_error('APPLICATION_DIRECTORY_NOT_EXISTS',E_USER_ERROR);
-        debug_print_backtrace();
-        die();
+        set_error_handler('\\Core\\ErrorHandler::errorHandler',E_USER_ERROR);//自己的错误处理函数
+
         //注册错误处理
         //注册异常处理
         //配置加载
         \Core\Config::setConfig(FRAMEWORK_PATH.'Conf/',array_merge(array(CONFIG),CONFIG_EXTENSION));
         \Core\Routing::routing();//根据参数对应到相应的方法
-        self::setGet();
-        var_dump(APP_PATH);
-        var_dump(realpath(APP_PATH));
-        $Controller = new \ReflectionClass(CONTROLLER_NAME);
-
+        self::setGet();//设置GET变量
+        \Core\App::startApp();
     }
     //设置GET变量
     static function setGet()
@@ -37,7 +32,6 @@ class ZjFramework
         {
             array_splice($_SERVER['PATH_INFO'],array_search('',$_SERVER['PATH_INFO']),1);
         }
-        var_dump($_SERVER['PATH_INFO']);
         if(!$_SERVER['PATH_INFO'])
         {
             return;
